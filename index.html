@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Sách điện tử 3D</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+  <!-- Turn.js (từ thư mục nội bộ) -->
+  <script src="js/turn.min.js"></script>
+
+  <style>
+    body {
+      background: linear-gradient(#f5f5dc, #eae0c8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Georgia', serif;
+    }
+
+    #flipbook {
+      width: 800px;
+      height: 500px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+
+.page {
+  background: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.page img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: none;
+  box-shadow: none;
+}
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 0 10px;
+      background-color: #eee;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sách -->
+  <div id="flipbook"></div>
+
+  <!-- Nút điều hướng -->
+  <div class="controls">
+    <button onclick="$('#flipbook').turn('previous')">⬅️ Trang trước</button>
+    <button onclick="$('#flipbook').turn('next')">Trang sau ➡️</button>
+  </div>
+
+  <!-- Âm thanh -->
+  <audio id="flipSound" preload="auto">
+  <source src="page-flip-sound-effect-384077.mp3" type="audio/mp3">
+</audio>
+
+  <script>
+    $(document).ready(function () {
+      const flipSound = document.getElementById("flipSound");
+
+      // Tạo 50 trang ảnh
+      for (let i = 1; i <= 50; i++) {
+        const page = $('<div class="page"><img src="images/' + i + '.jpg"></div>');
+        $('#flipbook').append(page);
+      }
+
+      // Khởi tạo Flipbook
+      $('#flipbook').turn({
+        width: 800,
+        height: 500,
+        autoCenter: true,
+        when: {
+          turning: function () {
+            flipSound.currentTime = 0;
+            flipSound.play();
+          }
+        }
+      });
+
+      // Hỗ trợ bàn phím mũi tên trái/phải
+      $(document).keydown(function (e) {
+        if (e.keyCode === 37) $('#flipbook').turn('previous'); // ←
+        if (e.keyCode === 39) $('#flipbook').turn('next');     // →
+      });
+    });
+  </script>
+
+</body>
+</html>
